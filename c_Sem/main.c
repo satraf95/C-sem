@@ -17,6 +17,9 @@ typedef struct Node{
 	struct Node *next;
 }Node;
 
+
+
+
 void addVertexToList (Node **head, char *vertex, int value){
 	Node *v, *temp;
 
@@ -37,13 +40,15 @@ void addVertexToList (Node **head, char *vertex, int value){
 }
 int main(int argc, char *argv[]){
 	FILE *stream;
-	char *line = NULL;
 	char *record;
-	ssize_t len = 0;
-	ssize_t nread;
 	int count = 0;
 	//int i = 0;
-	//char *data[64];
+	char data[BUFFER_SIZE];
+	//char ddata[BUFFER_SIZE];
+	const char delims[2] = ";";
+
+
+
 	//malloc(sizeof(data));
 
 //	if (argc != 2){
@@ -55,18 +60,33 @@ int main(int argc, char *argv[]){
 		perror("failed to open");
 		exit(EXIT_FAILURE);
 	}
-	while((nread = getline(&line, &len, stream)) != -1){
-		count++;
-		//record = strtok(nread, ';');
-		//data[i] = record;
-		//i++;
-		printf("Retrieved line of length %zu:\n", nread);
-		fwrite(line, nread, 1, stdout);
+
+	while((fgets(data, BUFFER_SIZE, stream))){
+		//record = strtok(data, delims))
+			//printf("%s \n", data);
+			record = strtok(data, delims);
+			while(record != NULL){
+				printf(" %s \n", record);
+				record = strtok(NULL, delims);
+			}
+			//record = strtok(NULL, delims);
+			//record = strtok(NULL, delims);
+
+
 
 	}
+
+//	while((nread = getline(&line, &len, stream)) != -1){
+//		count++;
+//		//record = strtok(nread, ';');
+//		//data[i] = record;
+//		//i++;
+//		printf("Retrieved line of length %zu:\n", nread);
+//		//printf("\n %s \n", record);
+//		fwrite(line, nread, 1, stdout);
+//
+//	}
 	printf("\nline count: %d", count);
-	free(line);
-	//free(data);
 	fclose(stream);
 	exit(EXIT_SUCCESS);
 
