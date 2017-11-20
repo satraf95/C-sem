@@ -17,7 +17,9 @@
 int main(int argc, char *argv[]) {
 	FILE *stream;
 	char *record;
-	char data[BUFFER_SIZE];
+	char *tmpRecord;
+	char line[BUFFER_SIZE];
+	double tmpValue;
 	const char *delims = ";";
 
 	char *tmp1 = NULL;
@@ -26,7 +28,7 @@ int main(int argc, char *argv[]) {
 	Node *head = NULL;
 
 	if (argc < 4) {
-		printf("Missing one or more parameter");
+		printf("Missing one or more parameter/n");
 		return MISSING_PARAMETER;
 	}
 
@@ -36,37 +38,29 @@ int main(int argc, char *argv[]) {
 		return FAILED_TO_OPEN;
 	}
 
-	while ((fgets(data, BUFFER_SIZE, stream))) {
-		record = strtok(data, delims);
+	while ((fgets(line, BUFFER_SIZE, stream))) {
+		record = strtok(line, delims);
 		while (record != NULL) {
-			strcpy(record, getValue(record));
-
+			tmpRecord = malloc(sizeof(record));
+			strcpy(tmpRecord, getValue(record));
 			tmp3 = tmp2;
 			tmp2 = tmp1;
-			tmp1 = record;
+			tmp1 = tmpRecord;
 			if (tmp3 != NULL) {
-				addVertexToList(&head, tmp3, tmp2, tmp1);
+				tmpValue = strtod(tmp1, &tmp1);
+				addVertexToList(&head, tmp3, tmp2, tmpValue);
 				tmp1 = NULL;
 				tmp2 = NULL;
 				tmp3 = NULL;
 			}
-
 			record = strtok(NULL, delims);
 		}
-
-//				while (record != NULL){
-//					ddata[i] = *record;
-//					i++;
-//					//printf(" %s \n", record);
-//					record = strtok(NULL, delims);
-//				}
-//				count++;
+		free(tmpRecord);
 
 	}
 
 	printList(head);
 
-	//printf("\nline count: %d", count);
 	fclose(stream);
 	exit(EXIT_SUCCESS);
 

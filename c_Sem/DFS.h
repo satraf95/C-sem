@@ -11,13 +11,23 @@
 typedef struct Node{
 	char vertex[32];
 	char vertex1[32];
-	char value[64];
+	double value;
 	struct Node *next;
 }Node;
 
-void addVertexToList (Node **head, char *vertex, char *vertex1, char *value);
+typedef struct Graph {
+	char vertex[32];
+	double value;
+	struct Graph *next;
+}Graph;
+
+void addVertexToList (Node **head, char *vertexS, char *vertexD, double value);
+
 void printList (Node *head);
-void deleteChars (char *string, char delims);
+char *getValue(char *record);
+int vertexCount(FILE *stream);
+char *getField(char *line, int num);
+char *findAllVertexs(char *record);
 
 
 #endif /* DFSMAIN_H_ */
