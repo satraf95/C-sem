@@ -57,35 +57,63 @@ char *getValue(char *record) {
 	return (array);
 
 }
-int vertexCount(FILE *stream) {
 
-	return NULL;
-}
-char *getField(char *line, int num) {
-	char *record;
-	for (record = strtok(line, ';'); record && *record;
-			record = strtok(NULL, ":\n")) {
-		if (!--num) {
-			return record;
+char *getField(char *line, int position,FILE *stream, char *output) {
+	int count = 0;
+	char *tmp;
+	int i = 0;
+	output = malloc(sizeof(line));
+	while (fgets(line, sizeof(line), stream)) {
+		tmp = strtok(line, ";");
+		while (tmp != NULL) {
+			count++;
+			if (count == position) {
+				strcpy(output + i, tmp);
+				i++;
+			}
+			tmp = strtok(NULL, ";");
 		}
+		i = 0;
 	}
 
-	return NULL;
+//	char *record;
+//	char *delims = ";";
+//	for (record = strtok(line, delims); record && *record;
+//			record = strtok(NULL, ":\n")) {
+//		if (!--position) {
+//			return record;
+//		}
+//	}
+
+	return output;
 }
 char *findAllVertexs(char *record) {
 	char *tmp = malloc(strlen(record));
-	int i, j;
+	char *temp = malloc(strlen(record));
+	strcpy(tmp, record);
+	printf("tmp %s\n", tmp);
+
+	int i, j, k = 0;
 	int length = strlen(record);
-	char *tmpVal = malloc(sizeof(char));
+	printf("length %d \n", length);
 	for (i = 0; i < length; i++) {
-		strcpy(tmpVal, record[i]);
-		for (j = 0; j < length; j++) {
-			if (tmpVal[j] == record[i]) {
-				strcpy(tmpVal, tmp[i]);
+		for (j = 0; j < i; j++) {
+			if (tmp[i] == tmp[j]) {
+				break;
 			}
 		}
-	}
+		if (i == j) {
 
-	return (tmp);
+			printf("unique %d %d \n", i, tmp[i]);
+
+			temp[k] = tmp[i];
+			k++;
+		}
+	}
+	free(tmp);
+	//printf("%s ", temp);
+
+	return (temp);
+	free(temp);
 }
 
