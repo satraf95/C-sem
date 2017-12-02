@@ -46,7 +46,7 @@ int main(int argc, char *argv[]) {
 	//while (j < 3) {
 
 		while ((fgets(line, BUFFER_SIZE, stream))) {
-	getField(line, 2, stream, tmp1);
+	getField(line, 2);
 //
 //			tmp = strdup(line);
 //			printf("Field %d would be %s \n", 0, getField(tmp, 2));
@@ -85,7 +85,7 @@ int main(int argc, char *argv[]) {
 	//printList(head);
 
 	fclose(stream);
-	free(tmp);
+	//free(tmp);
 	free(tmp1);
 	free(tmp2);
 	exit(EXIT_SUCCESS);

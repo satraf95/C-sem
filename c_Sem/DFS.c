@@ -10,28 +10,33 @@
 #include <string.h>
 #include "DFS.h"
 
-void addVertexToList(Node **head, char *vertexS, char *vertexD, double value) {
+void addEdge(char *vertexS, char *vertexD, int count) {
+	Graph *s, *d, *e, *p;
+	int i;
 
-	Node *v, *temp;
+	s = (Graph *) malloc(sizeof(Graph));
+	d = (Graph *) malloc(sizeof(Graph));
 
-	temp = malloc(sizeof(Node));
-	strcpy(temp->vertex, vertexS);
-	strcpy(temp->vertex1, vertexD);
-	temp->value = value;
-	temp->next = NULL;
+	strcpy(s->vertex, vertexS);
+	s->next = NULL;
+	strcpy(d->vertex, vertexD);
+	d->next = NULL;
 
-	if (*head) {
-		v = *head;
-		while (v->next) {
-			v = v->next;
+	for (i = 0; i < count; i++) {
+		p = G[i];
+		if ((p != s) && p == NULL) {
+			G[i] = s;
 		}
-		v->next = temp;
-	} else {
-		*head = temp;
+		if (p == s) {
+			e = G[i];
+			while (e->next != NULL) {
+				e = e->next;
+			}
+			e->next = d;
+		}
+		break;
 	}
-
 }
-
 void printList(Node *head) {
 	while (head) {
 		printf("Vertex:%s %s %f\n", head->vertex, head->vertex1, head->value);
@@ -57,35 +62,18 @@ char *getValue(char *record) {
 	return (array);
 
 }
+char *getField(char *line, int position) {
 
-char *getField(char *line, int position,FILE *stream, char *output) {
-	int count = 0;
-	char *tmp;
-	int i = 0;
-	output = malloc(sizeof(line));
-	while (fgets(line, sizeof(line), stream)) {
-		tmp = strtok(line, ";");
-		while (tmp != NULL) {
-			count++;
-			if (count == position) {
-				strcpy(output + i, tmp);
-				i++;
-			}
-			tmp = strtok(NULL, ";");
+	char *record;
+	char *delims = ";";
+	for (record = strtok(line, delims); record && *record;
+			record = strtok(NULL, ":\n")) {
+		if (!--position) {
+			return record;
 		}
-		i = 0;
 	}
 
-//	char *record;
-//	char *delims = ";";
-//	for (record = strtok(line, delims); record && *record;
-//			record = strtok(NULL, ":\n")) {
-//		if (!--position) {
-//			return record;
-//		}
-//	}
-
-	return output;
+	return NULL;
 }
 char *findAllVertexs(char *record) {
 	char *tmp = malloc(strlen(record));
@@ -116,4 +104,16 @@ char *findAllVertexs(char *record) {
 	return (temp);
 	free(temp);
 }
+void DFS(int i) {
+	Graph *p;
 
+	p = G[i];
+	visited[i] = 1;
+	while (p != NULL) {
+		i = p->vertex;
+		if (!visited[i]) {
+			DFS(i);
+		}
+		p = p->next;
+	}
+}
