@@ -10,7 +10,7 @@
 #include <string.h>
 #include "DFS.h"
 
-void addEdge(char *vertexS, char *vertexD, int count) {
+void addEdge(char *vertexS, char *vertexD, int count, Graph *G[]) {
 	Graph *s, *d, *e, *p;
 	int i;
 
@@ -62,28 +62,26 @@ char *getValue(char *record) {
 	return (array);
 
 }
-char *getField(char *line, int position) {
+const char *getField(char *line, int position) {
 
-	char *record;
-	char *delims = ";";
-	for (record = strtok(line, delims); record && *record;
-			record = strtok(NULL, ":\n")) {
-		if (!--position) {
+	const char *record;
+	for (record = strtok(line, ";"); record && *record;
+			record = strtok(NULL, ";\n")) {
+		if (!--position)
 			return record;
-		}
 	}
 
 	return NULL;
 }
-char *findAllVertexs(char *record) {
+char *findAllVertices(char *record) {
 	char *tmp = malloc(strlen(record));
 	char *temp = malloc(strlen(record));
 	strcpy(tmp, record);
-	printf("tmp %s\n", tmp);
+	//printf("tmp %s\n", tmp);
 
 	int i, j, k = 0;
 	int length = strlen(record);
-	printf("length %d \n", length);
+	//printf("length %d \n", length);
 	for (i = 0; i < length; i++) {
 		for (j = 0; j < i; j++) {
 			if (tmp[i] == tmp[j]) {
@@ -98,13 +96,12 @@ char *findAllVertexs(char *record) {
 			k++;
 		}
 	}
-	free(tmp);
 	//printf("%s ", temp);
 
 	return (temp);
-	free(temp);
+
 }
-void DFS(int i) {
+void DFS(int i, Graph *G[]) {
 	Graph *p;
 
 	p = G[i];
@@ -112,7 +109,7 @@ void DFS(int i) {
 	while (p != NULL) {
 		i = p->vertex;
 		if (!visited[i]) {
-			DFS(i);
+			DFS(i, G);
 		}
 		p = p->next;
 	}

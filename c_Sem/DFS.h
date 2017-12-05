@@ -20,17 +20,17 @@ typedef struct Graph {
 	struct Graph *next;
 }Graph;
 
-Graph *G[20];
+//Graph *G[20];
 int visited[20];
 
-void addEdge (char *vertexS, char *vertexD, int count);
+void addEdge (char *vertexS, char *vertexD, int count, Graph *G[]);
 
 void printList (Node *head);
 char *getValue(char *record);
 int vertexCount(FILE *stream);
-char *getField(char *line, int num);
-char *findAllVertexs(char *record);
-void DFS (int i);
+const char *getField(char *line, int num);
+char *findAllVertices(char *record);
+void DFS (int i, Graph *G[]);
 
 
 #endif /* DFSMAIN_H_ */
