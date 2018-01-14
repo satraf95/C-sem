@@ -8,29 +8,28 @@
 #ifndef DFSMAIN_H_
 #define DFSMAIN_H_
 
-typedef struct Node{
-	char vertex[32];
-	char vertex1[32];
-	double value;
+typedef struct Node {
+	double vertex;
 	struct Node *next;
-}Node;
+} Node;
 
 typedef struct Graph {
-	char vertex[32];
+	double vertex;
+	double value;
+	int visited;
 	struct Graph *next;
-}Graph;
+} Graph;
 
-//Graph *G[20];
-int visited[20];
+int vertexCount;
+Graph **G;
+int *visited;
 
-void addEdge (char *vertexS, char *vertexD, int count, Graph *G[]);
+void addEdge(double vertexS, double value, double vertexD, int Vertexcount);
+void addVertex(double ver, int vertexCount, int i);
 
-void printList (Node *head);
+void printList(Graph *head, Graph **G);
 char *getValue(char *record);
-int vertexCount(FILE *stream);
-const char *getField(char *line, int num);
-char *findAllVertices(char *record);
-void DFS (int i, Graph *G[]);
-
+double *findAllVertices(double record[], int count);
+void DFS(double vertexS, double vertexD, int maxPath);
 
 #endif /* DFSMAIN_H_ */

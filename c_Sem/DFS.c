@@ -10,38 +10,73 @@
 #include <string.h>
 #include "DFS.h"
 
-void addEdge(char *vertexS, char *vertexD, int count, Graph *G[]) {
-	Graph *s, *d, *e, *p;
+void addVertex(double ver, int vertexCount, int i) {
+	Graph *v;
+	v = (Graph *) malloc(sizeof(Graph));
+	//s = (Node *) malloc(sizeof(Node));
+	//int i;
+//	for (i = 0; i < vertexCount; i++) {
+//		printf("ver %d %f\n", i, ver[i]);
+//		v->vertex = ver[i];
+//		printf("ver v %f\n", v->vertex);
+//		v->next = NULL;
+//		G[i] = v;
+//
+//	}
+	v->vertex = ver;
+	v->next = NULL;
+
+	G[i] = v;
+
+//	for (i = 0; i < vertexCount; i++) {
+//		s = G[i];
+//		printf("addV %d %f\n", i, s->vertex);
+//
+//	}
+	//free(v);
+}
+
+void addEdge(double vertexS, double value, double vertexD, int Vertexcount) {
+	Graph *s, *d;
 	int i;
+	double tmp;
 
 	s = (Graph *) malloc(sizeof(Graph));
 	d = (Graph *) malloc(sizeof(Graph));
 
-	strcpy(s->vertex, vertexS);
-	s->next = NULL;
-	strcpy(d->vertex, vertexD);
+	d->vertex = vertexD;
+	d->value = value;
 	d->next = NULL;
 
-	for (i = 0; i < count; i++) {
-		p = G[i];
-		if ((p != s) && p == NULL) {
-			G[i] = s;
-		}
-		if (p == s) {
-			e = G[i];
-			while (e->next != NULL) {
-				e = e->next;
+	for (i = 0; i < Vertexcount; i++) {
+		s = G[i];
+		//printf("addEdge vertex %f\n", tmp);
+		if (s->vertex == vertexS) {
+			while (s->next != NULL) {
+				s = s->next;
 			}
-			e->next = d;
+			s->next = d;
 		}
-		break;
+		//G[i] = s;
+		//break;
 	}
+	//free(d);
+	//free(s);
 }
-void printList(Node *head) {
-	while (head) {
-		printf("Vertex:%s %s %f\n", head->vertex, head->vertex1, head->value);
-		head = head->next;
+void printList(Graph *head, Graph **G) {
+	int i;
+	Graph *p = malloc(sizeof(Graph));
+	for (i = 0; i < 10; i++) {
+		p = G[i];
+		while (p) {
+			printf("%s %f\n", p->vertex, p->value);
+			p = p->next;
+		}
 	}
+//	while (head) {
+//		printf("Vertex:%s %s %f\n", head->vertex, head->value);
+//		head = head->next;
+//	}
 }
 char *getValue(char *record) {
 	int strLength = strlen(record);
@@ -73,44 +108,65 @@ const char *getField(char *line, int position) {
 
 	return NULL;
 }
-char *findAllVertices(char *record) {
-	char *tmp = malloc(strlen(record));
-	char *temp = malloc(strlen(record));
-	strcpy(tmp, record);
-	//printf("tmp %s\n", tmp);
-
+double *findAllVertices(double record[], int count) {
 	int i, j, k = 0;
-	int length = strlen(record);
-	//printf("length %d \n", length);
-	for (i = 0; i < length; i++) {
+	double *tmp = malloc(sizeof(double) * count);
+
+	for (i = 0; i < count; i++) {
 		for (j = 0; j < i; j++) {
-			if (tmp[i] == tmp[j]) {
+			if (record[i] == record[j]) {
 				break;
 			}
 		}
 		if (i == j) {
-
-			printf("unique %d %d \n", i, tmp[i]);
-
-			temp[k] = tmp[i];
+			tmp[k] = record[i];
 			k++;
+
 		}
 	}
-	//printf("%s ", temp);
+	vertexCount = k;
 
-	return (temp);
-
+	return tmp;
 }
-void DFS(int i, Graph *G[]) {
-	Graph *p;
+void DFS(double vertexS, double vertexD, int maxPath) {
+	Graph *p, *d;
+	p = (Graph *) malloc(sizeof(Graph));
+	int i;
+	double pomVer = vertexS;
+	double prePomVer;
+	printf("start %f finish %f \n", vertexS, vertexD);
+	while (vertexD != pomVer) {
+	printf("vertext %f \n", pomVer);
+	for (i = 0; i < vertexCount; i++) {
+		p = G[i];
+		if (p->vertex == pomVer) {
+			//prePomVer = p->vertex;
+			printf("if %f\n", pomVer);
+			if (p->next == NULL){
+				p->visited = 1;
+				//pomVer = vertexS;
+				break;
+			}
+			p = p->next;
+			while (p->visited == 1) {
+				p = p->next;
+			}
+			printf("po while %f \n", p->vertex);
+			p->visited = 1;
 
-	p = G[i];
-	visited[i] = 1;
-	while (p != NULL) {
-		i = p->vertex;
-		if (!visited[i]) {
-			DFS(i, G);
+			pomVer = p->vertex;
 		}
-		p = p->next;
+
+		}
 	}
+
+	//	p = G[i];
+//	visited[i] = 1;
+//	while (p != NULL) {
+//		i = p->vertex;
+//		if (!visited[i]) {
+//			DFS(i, G);
+//		}
+//		p = p->next;
+//	}
 }
